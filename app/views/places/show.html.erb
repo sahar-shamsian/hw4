@@ -1,16 +1,34 @@
-<h1><%= @place.name %></h1>
-
-<h2>My Posts</h2>
-<% for post in @place.posts %>
-  <h3><%= post.title %></h3>
-  <h4><%= post.posted_on %></h4>
-  <p><%= post.description %></p>
+<h1>Here is the <%= @place.name %> page</h1>
+<p>
+<p>
+<p>
+ <a href="/posts/new?place_id=<%= @place.id %>" class="btn btn-success">Create New Post</a>
+</p>
+<p>
+<% if @current_user %>
+<h5>Here are the existing posts from <%= @place.name %>:</h5>
+<% for post in @place.posts.where({ user_id: @current_user.id}) %>
+ <div class="col-md-3 col-sm-6">
+ 
+     <% if post.uploaded_image.attached? %>
+       <img src="<%= url_for(post.uploaded_image) %>" class="img-fluid">
+     <% else %>
+       <img src="<%= post.image %>" class="img-fluid">
+     <% end %>
+ 
+     <h4>
+          <% if post.user %>
+         Posted by: <%= post.user.username %>
+       <% else %>
+         anonymous
+       <% end %>
+     </h4>
+ 
+ 
+     <p><%= post.title %></p>
+     <p><%= post.description %></p>
+   </div>
 <% end %>
-
-<p>
-  <a href="/posts/new?place_id=<%= @place.id %>">New Post</a>
-</p>
-
-<p>
-  <a href="/places">Back to All Places</a>
-</p>
+<% else %>
+Login to see your posts.
+<% end %>
